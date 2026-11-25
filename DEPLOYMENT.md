@@ -9,61 +9,61 @@
 
 ## 1. Public Service URL
 
-- **URL:** `https://k5-day14-agent-production.up.railway.app` *(hoặc domain Render tương ứng)*
-- **Nền tảng:** Railway (hoặc Render)
+- **URL:** `https://k5-l3a-day14-nguyenhaianh-2a202603484-deployment-production.up.railway.app`
+- **Nền tảng:** Railway
 - **Cấu hình:** `railway.toml` (DOCKERFILE builder, Healthcheck `/health`)
 
 ---
 
-## 2. Test Commands & Verification
+## 2. Test Commands & Verification (Đã kiểm tra thực tế thành công)
 
 Trước khi thực hiện, đặt các biến môi trường:
 ```bash
-export BASE="https://k5-day14-agent-production.up.railway.app"
-export AGENT_API_KEY="k5-production-secret-key-2026"
+export BASE="https://k5-l3a-day14-nguyenhaianh-2a202603484-deployment-production.up.railway.app"
+export AGENT_API_KEY="my-secret-key-123"
 ```
 
-### Lệnh 1: Liveness Health Check (Kỳ vọng: 200 OK)
+### Lệnh 1: Liveness Health Check (Đã test: 200 OK)
 ```bash
 curl -sS -o /dev/null -w '%{http_code}\n' "$BASE/health"
-# Kết quả: 200
+# Kết quả thực tế: 200
 ```
 
-### Lệnh 2: Readiness Check (Kỳ vọng: 200 OK khi Redis online)
+### Lệnh 2: Readiness Check (Đã test: 200 OK khi Redis online)
 ```bash
 curl -sS -o /dev/null -w '%{http_code}\n' "$BASE/ready"
-# Kết quả: 200
+# Kết quả thực tế: 200
 ```
 
-### Lệnh 3: API Test không có Header X-API-Key (Kỳ vọng: 401 Unauthorized)
+### Lệnh 3: API Test không có Header X-API-Key (Đã test: 401 Unauthorized)
 ```bash
 curl -sS -o /dev/null -w '%{http_code}\n' -X POST "$BASE/ask" \
   -H 'Content-Type: application/json' \
   -d '{"question":"Hello"}'
-# Kết quả: 401
+# Kết quả thực tế: 401
 ```
 
-### Lệnh 4: API Test có Header X-API-Key hợp lệ (Kỳ vọng: 200 OK)
+### Lệnh 4: API Test có Header X-API-Key hợp lệ (Đã test: 200 OK)
 ```bash
 curl -sS -o /dev/null -w '%{http_code}\n' -X POST "$BASE/ask" \
   -H 'Content-Type: application/json' \
   -H "X-API-Key: $AGENT_API_KEY" \
   -d '{"question":"Hello, what is deployment?"}'
-# Kết quả: 200
+# Kết quả thực tế: 200
 ```
 
 ---
 
-## 3. Environment Variables Đã Thiết Lập Trên Cloud
+## 3. Environment Variables Đã Thiết Lập Trên Railway
 
-| Biến môi trường | Giá trị mẫu / Mô tả | Mục đích |
+| Biến môi trường | Giá trị | Mục đích |
 | :--- | :--- | :--- |
-| `PORT` | `8000` *(do platform inject tự động)* | Cổng dịch vụ lắng nghe |
-| `ENVIRONMENT` | `production` | Môi trường triển khai |
-| `AGENT_API_KEY` | *(Giá trị bí mật sinh ngẫu nhiên)* | Xác thực API Key cho client |
-| `REDIS_URL` | `redis://default:xxx@redis.railway.internal:6379` | Kết nối Redis lưu rate limit & cost guard |
-| `RATE_LIMIT_PER_MINUTE` | `10` | Giới hạn số request/phút |
-| `DAILY_BUDGET_USD` | `10.0` | Ngân sách chi phí token/ngày |
+| `PORT` | `8000` *(Railway inject tự động)* | Cổng dịch vụ lắng nghe |
+| `ENVIRONMENT` | `production` | Môi trường production |
+| `AGENT_API_KEY` | *(Khóa bí mật bạn đã đặt)* | Xác thực API Key cho client |
+| `REDIS_URL` | `${{Redis.REDIS_URL}}` | Kết nối Redis nội bộ lưu rate limit & cost guard |
+| `RATE_LIMIT_PER_MINUTE` | `10` | Giới hạn 10 requests/phút |
+| `DAILY_BUDGET_USD` | `10.0` | Giới hạn ngân sách chi phí/ngày |
 
 ---
 

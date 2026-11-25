@@ -143,6 +143,10 @@ content-type: application/json
 
 ## Part 3: Cloud Deployment
 
+### Live Service Deployment (Railway)
+- **Public URL:** `https://k5-l3a-day14-nguyenhaianh-2a202603484-deployment-production.up.railway.app`
+- **Trạng thái:** Active, đã kết nối Redis, hoàn thành 4/4 lệnh kiểm thử ở CP6 (chi tiết trong `DEPLOYMENT.md`).
+
 ### Exercise 3.1 & 3.2: So sánh cấu hình `railway.toml` và `render.yaml`
 
 | Tiêu chí | Railway (`railway.toml`) | Render (`render.yaml`) |
