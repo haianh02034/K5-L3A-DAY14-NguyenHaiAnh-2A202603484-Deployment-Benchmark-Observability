@@ -1,0 +1,27 @@
+{
+  "target": "http://localhost:8002",
+  "concurrency": 1,
+  "total_requests": 300,
+  "duration_s": 75.05,
+  "rps": 4.0,
+  "error_rate": 0.0067,
+  "status_codes": {
+    "200": 298,
+    "503": 2
+  },
+  "latency_ms": {
+    "min": 138.8,
+    "avg": 251.0,
+    "p50": 202.4,
+    "p90": 232.4,
+    "p95": 234.4,
+    "p99": 1709.7,
+    "max": 1728.5
+  },
+  "total_cost_usd": 0.010324,
+  "slo": {
+    "p95_ms": 500,
+    "error_rate": 0.02,
+    "passed": true
+  }
+}
